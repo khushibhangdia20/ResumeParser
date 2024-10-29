@@ -1,0 +1,4 @@
+resume-parser/
+├── app.py
+└── templates/
+    └── index.html
