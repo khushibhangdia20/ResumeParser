@@ -1,0 +1,5 @@
+Resume Parser
+├── app.py
+├── venv\
+└── templates\
+    └── index.html

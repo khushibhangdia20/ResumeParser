@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Parser</title>
+    <style>
+        :root {
+            --dark-purple: #321325;
+            --deep-burgundy: #5F0F40;
+            --bright-red: #9A031E;
+            --rust-orange: #CB793A;
+            --sunny-yellow: #FCDC4D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-purple);
+            color: white;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--sunny-yellow);
+        }
+
+        .upload-form {
+            background-color: var(--deep-burgundy);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--sunny-yellow);
+        }
+
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--rust-orange);
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--dark-purple);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .resume-uploads {
+            margin-top: 2rem;
+        }
+
+        .submit-btn {
+            background-color: var(--rust-orange);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--bright-red);
+        }
+
+        .dynamic-uploads {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .file-input {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 5px;
+        }
+
+        .instructions {
+            background-color: var(--bright-red);
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Resume Parser</h1>
+            <p>Upload resumes and compare them to your job description</p>
+        </div>
+
+        <form class="upload-form" method="POST" enctype="multipart/form-data">
+            <div class="instructions">
+                <h3>Instructions:</h3>
+                <p>1. Enter the number of resumes you want to analyze</p>
+                <p>2. Paste the job description with comma-separated skills</p>
+                <p>3. Upload the resume files (PDF or DOCX only)</p>
+            </div>
+
+            <div class="form-group">
+                <label for="num_candidates">Number of Candidates:</label>
+                <input type="number" id="num_candidates" name="num_candidates" min="1" max="10" required>
+            </div>
+
+            <div class="form-group">
+                <label for="job_description">Job Description (comma-separated skills):</label>
+                <textarea id="job_description" name="job_description" required 
+                    placeholder="Example: Python, JavaScript, SQL, Project Management"></textarea>
+            </div>
+
+            <div class="resume-uploads">
+                <div id="file-inputs" class="dynamic-uploads"></div>
+            </div>
+
+            <button type="submit" class="submit-btn">Analyze Resumes</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('num_candidates').addEventListener('change', function(e) {
+            const container = document.getElementById('file-inputs');
+            container.innerHTML = '';
+            const count = parseInt(e.target.value);
+            
+            for(let i = 0; i < count; i++) {
+                const div = document.createElement('div');
+                div.className = 'file-input form-group';
+                div.innerHTML = `
+                    <label for="resume_${i}">Resume ${i + 1}:</label>
+                    <input type="file" id="resume_${i}" name="resume_${i}" 
+                           accept=".pdf,.docx" required>
+                `;
+                container.appendChild(div);
+            }
+        });
+    </script>
+</body>
+</html>

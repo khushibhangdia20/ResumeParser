@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results</title>
+    <style>
+        :root {
+            --dark-purple: #321325;
+            --deep-burgundy: #5F0F40;
+            --bright-red: #9A031E;
+            --rust-orange: #CB793A;
+            --sunny-yellow: #FCDC4D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-purple);
+            color: white;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--sunny-yellow);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .candidate-card {
+            background-color: var(--deep-burgundy);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .candidate-name {
+            color: var(--sunny-yellow);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .score-section {
+            background-color: var(--bright-red);
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .score {
+            font-size: 2rem;
+            color: var(--sunny-yellow);
+            text-align: center;
+        }
+
+        .skills-section {
+            margin-top: 1rem;
+        }
+
+        .skills-title {
+            color: var(--rust-orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .skills-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            background-color: var(--rust-orange);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background-color: var(--rust-orange);
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 2rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: var(--bright-red);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: var(--dark-purple);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--sunny-yellow);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Resume Analysis Results</h1>
+            <p>Ranked by match score</p>
+        </div>
+
+        <div class="results-grid">
+            {% for candidate in candidates|sort(attribute='score', reverse=True) %}
+            <div class="candidate-card">
+                <h2 class="candidate-name">{{ candidate.name }}</h2>
+                
+                <div class="score-section">
+                    <h3>Match Score</h3>
+                    <div class="score">{{ "%.1f"|format(candidate.score) }}%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ candidate.score | floatformat:1 }}%"></div>
+                    </div>
+                </div>
+
+                <div class="skills-section">
+                    <h3 class="skills-title">Matched Skills</h3>
+                    <ul class="skills-list">
+                        {% for skill in candidate.matched_skills %}
+                        <li class="skill-tag">{{ skill }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <a href="/" class="back-btn">Upload More Resumes</a>
+    </div>
+</body>
+</html>
